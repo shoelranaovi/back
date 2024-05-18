@@ -39,3 +39,24 @@ export const signup=async(req,res,next)=>{
     }
     return res.status(201).json({user})
 }
+
+export const login=async(req,res,next)=>{
+    const{email,password}=req.body
+    let existinguser
+    try {
+        existinguser=await User.findOne({email})
+    } catch (err) {
+      return  console.log(err);
+    }
+    
+    if (!existinguser) {
+       return res.status(400).json({massage:"users not existing"})
+        
+    }
+    const comoparepass= password === existinguser.password
+    if (!comoparepass) {
+        return res.status(400).json({massage:"Incorrect password"})
+    }
+    return res.status(200).json({massage:"Login succesfull"})
+  
+}
